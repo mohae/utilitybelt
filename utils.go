@@ -1,7 +1,6 @@
 package utilitybelt
 
 import (
-	"errors"
 	_ "bytes"
 	"strings"
 )
@@ -33,19 +32,4 @@ func StringIsBool(s string) bool {
 			return true
 	}
 	return false
-}
-
-// StringToBool checks the string to see if it represents a boolean value. If 
-// it does, its boolean version is returned. Otherwise an error.
-// Only true and false versions are supported. 
-// TODO: should "0", "1", "on", "off", etc be supported here or in other funcs
-func StringToBool(s string) (bool, error) {
-	switch strings.ToLower(s) {
-		case "t", "true":
-			return true, nil
-		 case "f", "false":
-			return false, nil
-	}
-
-	return false, errors.New(s + " is not a supported boolean value")
 }
