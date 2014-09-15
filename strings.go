@@ -1,6 +1,7 @@
 package goutils
 
 import (
+	"strconv"
 	"strings"
 )
 
@@ -37,4 +38,14 @@ func SetSuffix(s string, suffix string) string {
 	}
 
 	return s + suffix
+}
+
+// ParseBool wraps strconv.ParseBool. It treats an error condition as a false.
+func ParseBool(s string) bool {
+	b, err := strconv.ParseBool(s)
+	if err != nil {
+		return false
+	}
+
+	return b
 }
