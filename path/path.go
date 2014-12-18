@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // Dir, directory is a container for a list of filenames
@@ -19,7 +20,7 @@ type file struct {
 	Info os.FileInfo
 }
 
-// DirWalk walks the passed path, making a list of all the files that are 
+// DirWalk walks the passed path, making a list of all the files that are
 // children of the path.
 func (d *Dir) Walk(path string) error {
 	// If the directory exists, create a list of its contents.
@@ -37,7 +38,7 @@ func (d *Dir) Walk(path string) error {
 		err = errors.New(fmt.Sprintf("%s does not exist", path))
 		return err
 	}
-	
+
 	fullPath, err := filepath.Abs(path)
 	if err != nil {
 		return err
@@ -57,7 +58,7 @@ func (d *Dir) addFile(root string, p string, fi os.FileInfo, err error) error {
 	// See if the path exists
 	var exists bool
 	exists, err = PathExists(p)
-	if  err != nil {
+	if err != nil {
 		return err
 	}
 
@@ -98,6 +99,18 @@ func PathExists(p string) (bool, error) {
 	if os.IsNotExist(err) {
 		return false, nil
 	}
-	
+
 	return false, err
+}
+
+// AppendSlash appends a slash, `/`,  to the end of the passed string, if it
+// doesn't already end with one. For OS independend filepaths, `/` are always
+// used internally with OS-specific conversion occuring before interacting
+// with the filesystem via filepath.FromSlash() and filepath.ToSlash()
+func AppendSlash(s string) string {
+	if strings.HasSuffix(s, "/") {
+		return s
+	}
+
+	return s + "/"
 }
