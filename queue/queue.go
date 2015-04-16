@@ -39,7 +39,9 @@ import (
 // be shifted to make room; otherwise the queue will grow
 var shiftPercent = 20
 
-type queue struct {
+// Queue represents a queue and everything needed to manage it. The preferred method
+// for creating a new Queue is to use the New() func.
+type Queue struct {
 	mu           sync.Mutex
 	items        []interface{}
 	head         int // current item in queue
@@ -53,14 +55,14 @@ type queue struct {
 // the queue will not grow larger than maxCapacity; if it is at maxCa[acity
 // and growth is requred to enqueue an item, an error will occur.
 // cu
-func New(size, maxCap int) *queue {
-	return &queue{items: make([]interface{}, size, size), length: size, maxCapacity: maxCap, shiftPercent: shiftPercent}
+func New(size, maxCap int) *Queue {
+	return &Queue{items: make([]interface{}, size, size), length: size, maxCapacity: maxCap, shiftPercent: shiftPercent}
 }
 
 // Enqueue: adds an item to the queue. If adding the item requires growing
 // the queue, the queue will be expanded. If the queue cannot be grown, an
 // error will be returned.
-func (q *queue) Enqueue(item interface{}) error {
+func (q *Queue) Enqueue(item interface{}) error {
 	q.mu.Lock()
 	defer q.mu.Unlock()
 	// See if it needs to grow
@@ -81,7 +83,7 @@ func (q *queue) Enqueue(item interface{}) error {
 
 // Dequeue removes an item from the queue. If the removal of the item empties
 // the queue, the head and tail will be reset.
-func (q *queue) Dequeue() interface{} {
+func (q *Queue) Dequeue() interface{} {
 	q.mu.Lock()
 	i := q.items[q.head]
 	q.head++
@@ -95,7 +97,7 @@ func (q *queue) Dequeue() interface{} {
 }
 
 // IsEmpty returns whether or not the queue is empty
-func (q *queue) IsEmpty() bool {
+func (q *Queue) IsEmpty() bool {
 	q.mu.Lock()
 	if q.tail == 0 || q.head > q.tail {
 		q.mu.Unlock()
@@ -108,7 +110,7 @@ func (q *queue) IsEmpty() bool {
 // shift: if shiftPercent items have been removed from the queue, the remaining items
 // in the queue will be shifted to element 0-n, where n is the number of remaining
 // items in the queue. Returns whether or not a shift occurred
-func (q *queue) shift() bool {
+func (q *Queue) shift() bool {
 	if q.head <= (q.length*q.shiftPercent)/100 {
 		return false
 	}
@@ -125,7 +127,7 @@ func (q *queue) shift() bool {
 //
 // Since a temporary slice is created to store the current queue, all items in queue
 // are automatically shifted
-func (q *queue) grow() error {
+func (q *Queue) grow() error {
 	if q.length == q.maxCapacity && q.maxCapacity > 0 {
 		return fmt.Errorf("groweQueue: cannot grow beyond max capacity of %d", q.maxCapacity)
 	}
@@ -150,7 +152,7 @@ func (q *queue) grow() error {
 }
 
 // reset resets the queue; head and tail point to element 0
-func (q *queue) Reset() {
+func (q *Queue) Reset() {
 	q.mu.Lock()
 	q.head = 0
 	q.tail = 0
