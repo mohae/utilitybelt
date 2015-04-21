@@ -1,9 +1,11 @@
 // Queue implements a queue that will grow as needed, minimize unnecessary growth, and
 // can be safely accessed from multiple routines without introducing race conditions.
-// If necessary, the growth of the queue can be capped to a configurable size.
+// If necessary, the growth of the queue can be capped to a configurable size. When a
+// maximum capacity for the queue is defined, an error will occur if the queue is full
+// and an attempt is made to add another item to the queue.
 //
 // A queue is created with a minimum length and an optional maximum size (capacity).
-// If the mzx size of the queue == 0, the queue will be unbounded. The growth rate of
+// If the max size of the queue == 0, the queue will be unbounded. The growth rate of
 // the queue is similar to that of a slice. When the queue grows, all items in the
 // queue are shifted so that the head of the queue points to the first element in the
 // queue.
@@ -20,7 +22,7 @@
 // efficient reuse of the queue without having to check to see if the queue items
 // should be shifted or the queue should be grown.
 //
-// Once a queue grows, it will not be shrunk.
+// Once a queue grows, it will not be shrunk. This behavior may change in the future.
 //
 // All publicly exposed methods on the queue use locking to protect the queue from
 // race conditions in situations where the queue is being accessed concurrently.
@@ -46,22 +48,21 @@ type Queue struct {
 	items        []interface{}
 	head         int // current item in queue
 	tail         int // tail is the next insert point. last item is tail - 1
-	length       int
-	maxCapacity  int
-	shiftPercent int
+	length       int // the current length (cap) of the queue,
+	maxCap       int // if > 0, the queue's cap cannot grow beyond this value
+	shiftPercent int // the % of items that need to be removed before shifting occurs
 }
 
-// New returns an empty queue with a capacity of size. If maxCap is > 0,
-// the queue will not grow larger than maxCapacity; if it is at maxCa[acity
+// New returns an empty queue with a capacity equal to the recieved size value. If
+// maxCap is > 0, the queue will not grow larger than maxCap; if it is at maxCap
 // and growth is requred to enqueue an item, an error will occur.
-// cu
 func New(size, maxCap int) *Queue {
 	return &Queue{items: make([]interface{}, size, size), length: size, maxCapacity: maxCap, shiftPercent: shiftPercent}
 }
 
 // Enqueue: adds an item to the queue. If adding the item requires growing
-// the queue, the queue will be expanded. If the queue cannot be grown, an
-// error will be returned.
+// the queue, the queue will either be shifted, to make room at the end of the queue
+// or it will grow. If the queue cannot be grown, an error will be returned.
 func (q *Queue) Enqueue(item interface{}) error {
 	q.mu.Lock()
 	defer q.mu.Unlock()
@@ -82,7 +83,7 @@ func (q *Queue) Enqueue(item interface{}) error {
 }
 
 // Dequeue removes an item from the queue. If the removal of the item empties
-// the queue, the head and tail will be reset.
+// the queue, the head and tail will be set to 0.
 func (q *Queue) Dequeue() interface{} {
 	q.mu.Lock()
 	i := q.items[q.head]
@@ -123,7 +124,7 @@ func (q *Queue) shift() bool {
 
 // grow grows the slice using an algorithm similar to growSlice(). This is a bit slower
 // than relying on slice's automatic growth, but allows for capacity enforcement w/o
-// growing the slice cap beyond the configured max capacity, if applicable.
+// growing the slice cap beyond the configured maxCap, if applicable.
 //
 // Since a temporary slice is created to store the current queue, all items in queue
 // are automatically shifted
@@ -151,7 +152,7 @@ func (q *Queue) grow() error {
 	return nil
 }
 
-// reset resets the queue; head and tail point to element 0
+// Reset resets the queue; head and tail point to element 0.
 func (q *Queue) Reset() {
 	q.mu.Lock()
 	q.head = 0
