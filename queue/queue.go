@@ -100,12 +100,20 @@ func (q *Queue) Dequeue() interface{} {
 // IsEmpty returns whether or not the queue is empty
 func (q *Queue) IsEmpty() bool {
 	q.mu.Lock()
-	if q.tail == 0 || q.head > q.tail {
+	if q.tail == 0 || q.head == q.tail {
 		q.mu.Unlock()
 		return true
 	}
 	q.mu.Unlock()
 	return false
+}
+
+func (q *Queue) Tail() int {
+	return q.tail
+}
+
+func (q *Queue) Head() int {
+	return q.head
 }
 
 // shift: if shiftPercent items have been removed from the queue, the remaining items
