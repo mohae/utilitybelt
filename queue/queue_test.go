@@ -9,16 +9,16 @@ func TestNew(t *testing.T) {
 	if cap(q.items) != 10 {
 		t.Errorf("expected 10, got %d", cap(q.items))
 	}
-	if q.maxCapacity != 0 {
-		t.Errorf("expected 0, got %d", q.maxCapacity)
+	if q.maxCap != 0 {
+		t.Errorf("expected 0, got %d", q.maxCap)
 	}
 
 	q = New(100, 200)
 	if cap(q.items) != 100 {
 		t.Errorf("expected 100, got %d", cap(q.items))
 	}
-	if q.maxCapacity != 200 {
-		t.Errorf("expected 200, got %d", q.maxCapacity)
+	if q.maxCap != 200 {
+		t.Errorf("expected 200, got %d", q.maxCap)
 	}
 }
 
@@ -63,8 +63,8 @@ func TestQueueing(t *testing.T) {
 		if q.head != test.headPos {
 			t.Errorf("Expected head to be at pos %d, got %d", test.headPos, q.head)
 		}
-		if q.maxCapacity != test.maxCap {
-			t.Errorf("Expected maxCap to be %d, was %d", test.maxCap, q.maxCapacity)
+		if q.maxCap != test.maxCap {
+			t.Errorf("Expected maxCap to be %d, was %d", test.maxCap, q.maxCap)
 		}
 		if cap(q.items) > test.maxCap && test.maxCap > 0 {
 			t.Errorf("Expected cap of queue to be equal to it's max capacity, %d; was %d", test.maxCap, cap(q.items))

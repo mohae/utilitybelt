@@ -57,7 +57,7 @@ type Queue struct {
 // maxCap is > 0, the queue will not grow larger than maxCap; if it is at maxCap
 // and growth is requred to enqueue an item, an error will occur.
 func New(size, maxCap int) *Queue {
-	return &Queue{items: make([]interface{}, size, size), length: size, maxCapacity: maxCap, shiftPercent: shiftPercent}
+	return &Queue{items: make([]interface{}, size, size), length: size, maxCap: maxCap, shiftPercent: shiftPercent}
 }
 
 // Enqueue: adds an item to the queue. If adding the item requires growing
@@ -129,17 +129,17 @@ func (q *Queue) shift() bool {
 // Since a temporary slice is created to store the current queue, all items in queue
 // are automatically shifted
 func (q *Queue) grow() error {
-	if q.length == q.maxCapacity && q.maxCapacity > 0 {
-		return fmt.Errorf("groweQueue: cannot grow beyond max capacity of %d", q.maxCapacity)
+	if q.length == q.maxCap && q.maxCap > 0 {
+		return fmt.Errorf("groweQueue: cannot grow beyond max capacity of %d", q.maxCap)
 	}
 	if q.length < 1024 {
 		q.length += q.length
 	} else {
 		q.length += q.length / 4
 	}
-	// If the maxCapacity is set, cannot grow it beyond that
-	if q.length > q.maxCapacity && q.maxCapacity > 0 {
-		q.length = q.maxCapacity
+	// If the maxCap is set, cannot grow it beyond that
+	if q.length > q.maxCap && q.maxCap > 0 {
+		q.length = q.maxCap
 	}
 	// grow the slice
 	l := q.tail - q.head
