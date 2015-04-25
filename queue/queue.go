@@ -136,7 +136,8 @@ func (q *Queue) Length() int {
 // ItemCount returns the current number of items in the queue
 func (q *Queue) ItemCount() int {
 	q.RLock()
-	items := q.head - q.tail
+	items := q.tail - q.head
+	items := q.tail - q.head
 	q.RUnlock()
 	return items
 }
