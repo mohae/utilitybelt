@@ -44,7 +44,7 @@ var shiftPercent = 20
 // Queue represents a queue and everything needed to manage it. The preferred method
 // for creating a new Queue is to use the New() func.
 type Queue struct {
-	mu           sync.Mutex
+	sync.RWMutex
 	items        []interface{}
 	head         int // current item in queue
 	tail         int // tail is the next insert point. last item is tail - 1
@@ -64,8 +64,8 @@ func New(size, maxCap int) *Queue {
 // the queue, the queue will either be shifted, to make room at the end of the queue
 // or it will grow. If the queue cannot be grown, an error will be returned.
 func (q *Queue) Enqueue(item interface{}) error {
-	q.mu.Lock()
-	defer q.mu.Unlock()
+	q.Lock()
+	defer q.Unlock()
 	// See if it needs to grow
 	if q.tail == q.length {
 		shifted := q.shift()
@@ -85,51 +85,51 @@ func (q *Queue) Enqueue(item interface{}) error {
 // Dequeue removes an item from the queue. If the removal of the item empties
 // the queue, the head and tail will be set to 0.
 func (q *Queue) Dequeue() interface{} {
-	q.mu.Lock()
+	q.Lock()
 	i := q.items[q.head]
 	q.head++
 	if q.head > q.tail {
-		q.mu.Unlock()
+		q.Unlock()
 		q.Reset()
 		return i
 	}
-	q.mu.Unlock()
+	q.Unlock()
 	return i
 }
 
 // IsEmpty returns whether or not the queue is empty
 func (q *Queue) IsEmpty() bool {
-	q.mu.Lock()
+	q.RLock()
 	if q.tail == 0 || q.head == q.tail {
-		q.mu.Unlock()
+		q.RUnlock()
 		return true
 	}
-	q.mu.Unlock()
+	q.RUnlock()
 	return false
 }
 
 // Tail returns the current tail position
 func (q *Queue) Tail() int {
-	q.mu.Lock()
+	q.RLock()
 	tail := q.tail
-	q.mu.Lock()
+	q.RLock()
 	return tail
 }
 
 // Head returns the current head position
 func (q *Queue) Head() int {
-	q.mu.Lock()
+	q.RLock()
 	head := q.head
-	q.mu.Unlock()
+	q.RUnlock()
 	return head
 }
 
 // Length returns the current length(cap) of the queue. Note, this is not the
 // number of items in the queue, for that use Items()
 func (q *Queue) Length() int {
-	q.mu.Lock()
+	q.RLock()
 	length := q.length
-	q.mu.Unlock()
+	q.RUnlock()
 	return length
 }
 
@@ -179,8 +179,8 @@ func (q *Queue) grow() error {
 
 // Reset resets the queue; head and tail point to element 0.
 func (q *Queue) Reset() {
-	q.mu.Lock()
+	q.Lock()
 	q.head = 0
 	q.tail = 0
-	q.mu.Unlock()
+	q.Unlock()
 }
