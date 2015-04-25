@@ -108,16 +108,29 @@ func (q *Queue) IsEmpty() bool {
 	return false
 }
 
+// Tail returns the current tail position
 func (q *Queue) Tail() int {
-	return q.tail
+	q.mu.Lock()
+	tail := q.tail
+	q.mu.Lock()
+	return tail
 }
 
+// Head returns the current head position
 func (q *Queue) Head() int {
-	return q.head
+	q.mu.Lock()
+	head := q.head
+	q.mu.Unlock()
+	return head
 }
 
+// Length returns the current length(cap) of the queue. Note, this is not the
+// number of items in the queue, for that use Items()
 func (q *Queue) Length() int {
-	return q.length
+	q.mu.Lock()
+	length := q.length
+	q.mu.Unlock()
+	return length
 }
 
 // shift: if shiftPercent items have been removed from the queue, the remaining items
