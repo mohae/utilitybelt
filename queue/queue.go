@@ -133,6 +133,14 @@ func (q *Queue) Length() int {
 	return length
 }
 
+// ItemCount returns the current number of items in the queue
+func (q *Queue) ItemCount() int {
+	q.RLock()
+	items := q.head - q.tail
+	q.RUnlock()
+	return items
+}
+
 // shift: if shiftPercent items have been removed from the queue, the remaining items
 // in the queue will be shifted to element 0-n, where n is the number of remaining
 // items in the queue. Returns whether or not a shift occurred
