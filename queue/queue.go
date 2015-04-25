@@ -137,7 +137,6 @@ func (q *Queue) Length() int {
 func (q *Queue) ItemCount() int {
 	q.RLock()
 	items := q.tail - q.head
-	items := q.tail - q.head
 	q.RUnlock()
 	return items
 }
