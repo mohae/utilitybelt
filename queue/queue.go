@@ -116,6 +116,10 @@ func (q *Queue) Head() int {
 	return q.head
 }
 
+func (q *Queue) Length() int {
+	return q.length
+}
+
 // shift: if shiftPercent items have been removed from the queue, the remaining items
 // in the queue will be shifted to element 0-n, where n is the number of remaining
 // items in the queue. Returns whether or not a shift occurred
