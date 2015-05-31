@@ -19,20 +19,16 @@ func InterfaceToSliceOfStrings(v interface{}) []string {
 		return nil
 	}
 	var sl []string
-
 	switch reflect.TypeOf(v).Kind() {
 	case reflect.Slice:
 		s := reflect.ValueOf(v)
-		sLen := s.Len()
-
-		for i := 0; i < sLen; i++ {
-			sl = append(sl, s.Index(i).Interface().(string))
+		sl = make([]string, s.Len(), s.Len())
+		for i := 0; i < s.Len(); i++ {
+			sl[i] = s.Index(i).Interface().(string)
 		}
-
 	default:
 		return nil
 	}
-
 	return sl
 }
 
@@ -41,15 +37,10 @@ func SliceOfStrings(s []string) []string {
 	if s == nil {
 		return nil
 	}
-
-	var sl []string
-
-	sLen := len(s)
-
-	for i := 0; i < sLen; i++ {
-		sl = append(sl, s[i])
+	sl := make([]string, len(s), len(s))
+	for i := 0; i < len(s); i++ {
+		sl[i] = s[i]
 	}
-
 	return sl
 }
 
@@ -61,16 +52,13 @@ func InterfaceToSliceOfInts(v interface{}) []int {
 		return nil
 	}
 	var sl []int
-
 	switch reflect.TypeOf(v).Kind() {
 	case reflect.Slice:
 		s := reflect.ValueOf(v)
-		sLen := s.Len()
-
-		for i := 0; i < sLen; i++ {
-			sl = append(sl, s.Index(i).Interface().(int))
+		sl = make([]int, s.Len(), s.Len())
+		for i := 0; i < s.Len(); i++ {
+			sl[i] = s.Index(i).Interface().(int)
 		}
-
 	default:
 		return nil
 	}
@@ -82,15 +70,10 @@ func SliceOfInts(s []int) []int {
 	if s == nil {
 		return nil
 	}
-
-	var sl []int
-
-	sLen := len(s)
-
-	for i := 0; i < sLen; i++ {
-		sl = append(sl, s[i])
+	sl := make([]int, len(s), len(s))
+	for i := 0; i < len(s); i++ {
+		sl[i] = s[i]
 	}
-
 	return sl
 }
 
@@ -99,16 +82,12 @@ func Iface(iface interface{}) interface{} {
 	if iface == nil {
 		return nil
 	}
-
 	// Make the interface a reflect.Value
 	original := reflect.ValueOf(iface)
-
 	// Make a copy of the same type as the original.
 	copy := reflect.New(original.Type()).Elem()
-
 	// Recursively copy the original.
 	copyRecursive(original, copy)
-
 	// Return theb copy as an interface.
 	return copy.Interface()
 }
@@ -121,37 +100,30 @@ func copyRecursive(original, copy reflect.Value) {
 	case reflect.Ptr:
 		// Get the actual value being pointed to.
 		originalValue := original.Elem()
-
 		// if  it isn't valid, return.
 		if !originalValue.IsValid() {
 			return
 		}
-
 		copy.Set(reflect.New(originalValue.Type()))
 		copyRecursive(originalValue, copy.Elem())
-
 	case reflect.Interface:
 		// Get the value for the interface, not the pointer.
 		originalValue := original.Elem()
-
 		// Get the value by calling Elem().
 		copyValue := reflect.New(originalValue.Type()).Elem()
 		copyRecursive(originalValue, copyValue)
 		copy.Set(copyValue)
-
 	case reflect.Struct:
 		// Go through each field of the struct and copy it.
 		for i := 0; i < original.NumField(); i++ {
 			copyRecursive(original.Field(i), copy.Field(i))
 		}
-
 	case reflect.Slice:
 		// Make a new slice and copy each element.
 		copy.Set(reflect.MakeSlice(original.Type(), original.Len(), original.Cap()))
 		for i := 0; i < original.Len(); i++ {
 			copyRecursive(original.Index(i), copy.Index(i))
 		}
-
 	case reflect.Map:
 		copy.Set(reflect.MakeMap(original.Type()))
 		for _, key := range original.MapKeys() {
@@ -160,7 +132,6 @@ func copyRecursive(original, copy reflect.Value) {
 			copyRecursive(originalValue, copyValue)
 			copy.SetMapIndex(key, copyValue)
 		}
-
 	// Set the actual values from here on.
 	case reflect.String:
 		copy.SetString(original.Interface().(string))
