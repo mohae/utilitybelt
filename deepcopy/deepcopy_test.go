@@ -140,35 +140,6 @@ var testS = testStruct{
 	},
 }
 
-//var origMapStringInterface = map[string]interface{}{
-//}
-
-func TestSliceStrings(t *testing.T) {
-	Convey("Given a nil slice", t, func() {
-		Convey("Deep copying it", func() {
-			copy := SliceOfStrings(nil)
-			Convey("Should result in nil", func() {
-				So(copy, ShouldBeNil)
-			})
-		})
-	})
-
-	Convey("Given a slice of type string", t, func() {
-		Convey("Deep copying it", func() {
-			copy := SliceOfStrings(sliceStringsOrig)
-			Convey("Should result in a copy", func() {
-				So(copy, ShouldResemble, sliceStringsOrig)
-			})
-			Convey("And modifying the copy", func() {
-				copy[1] = "elemental"
-				Convey("Should not change the original", func() {
-					So(sliceStringsOrig[1], ShouldEqual, "element2")
-				})
-			})
-		})
-	})
-}
-
 func TestInterfaceSliceStrings(t *testing.T) {
 	Convey("Given a nil slice", t, func() {
 		Convey("Deep copying it", func() {
@@ -201,42 +172,6 @@ func TestInterfaceSliceStrings(t *testing.T) {
 				copy[1] = "elemental"
 				Convey("Should not change the original", func() {
 					So(sliceStringsOrig[1], ShouldEqual, "element2")
-				})
-			})
-		})
-	})
-}
-
-/*
-func TestMapStringInterface(t *testing.T) {
-	Convey("Given a map[string]interface{} with a slice", t, func() {
-		Con
-}
-*/
-
-func TestSliceInts(t *testing.T) {
-	Convey("Given a nil slice", t, func() {
-		Convey("Deep copying it", func() {
-			copy := SliceOfInts(nil)
-			Convey("Should result in nil", func() {
-				So(copy, ShouldBeNil)
-			})
-		})
-	})
-
-	Convey("Given a slice of type int", t, func() {
-		Convey("Deep copying it", func() {
-			copy := SliceOfInts(sliceIntsOrig)
-			Convey("Should result in a copy", func() {
-				So(copy, ShouldResemble, sliceIntsOrig)
-			})
-			Convey("And their addresses should be different", func() {
-				So(&copy, ShouldNotPointTo, &sliceIntsOrig)
-			})
-			Convey("And modifying the copy", func() {
-				copy[1] = 333
-				Convey("Should not change the original", func() {
-					So(sliceIntsOrig[1], ShouldEqual, 2)
 				})
 			})
 		})
