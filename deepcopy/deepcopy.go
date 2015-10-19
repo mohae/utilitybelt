@@ -80,11 +80,20 @@ func copyRecursive(original, copy reflect.Value) {
 		if !originalValue.IsValid() {
 			return
 		}
+		if !copy.CanSet() {
+			return
+		}
 		copy.Set(reflect.New(originalValue.Type()))
 		copyRecursive(originalValue, copy.Elem())
 	case reflect.Interface:
+		if !copy.CanSet() {
+			return
+		}
 		// Get the value for the interface, not the pointer.
 		originalValue := original.Elem()
+		if !originalValue.IsValid() {
+			return
+		}
 		// Get the value by calling Elem().
 		copyValue := reflect.New(originalValue.Type()).Elem()
 		copyRecursive(originalValue, copyValue)
@@ -95,12 +104,18 @@ func copyRecursive(original, copy reflect.Value) {
 			copyRecursive(original.Field(i), copy.Field(i))
 		}
 	case reflect.Slice:
+		if !copy.CanSet() {
+			return
+		}
 		// Make a new slice and copy each element.
 		copy.Set(reflect.MakeSlice(original.Type(), original.Len(), original.Cap()))
 		for i := 0; i < original.Len(); i++ {
 			copyRecursive(original.Index(i), copy.Index(i))
 		}
 	case reflect.Map:
+		if !copy.CanSet() {
+			return
+		}
 		copy.Set(reflect.MakeMap(original.Type()))
 		for _, key := range original.MapKeys() {
 			originalValue := original.MapIndex(key)
@@ -110,18 +125,30 @@ func copyRecursive(original, copy reflect.Value) {
 		}
 	// Set the actual values from here on.
 	case reflect.String:
+		if !original.CanSet() || !copy.CanSet() {
+			return
+		}
 		copy.SetString(original.Interface().(string))
-
 	case reflect.Int:
+		if !original.CanSet() || !copy.CanSet() {
+			return
+		}
 		copy.SetInt(int64(original.Interface().(int)))
-
 	case reflect.Bool:
+		if !original.CanSet() || !copy.CanSet() {
+			return
+		}
 		copy.SetBool(original.Interface().(bool))
-
 	case reflect.Float64:
+		if !original.CanSet() || !copy.CanSet() {
+			return
+		}
 		copy.SetFloat(original.Interface().(float64))
 
 	default:
+		if !original.CanSet() || !copy.CanSet() {
+			return
+		}
 		copy.Set(original)
 	}
 }
