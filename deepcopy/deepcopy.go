@@ -12,8 +12,8 @@ import (
 	"reflect"
 )
 
-// InterfaceToSliceOfStrings takes an interface that is a slice of strings
-// and returns a deep copy of it as a slice of strings.
+// InterfaceToSliceOfStrings takes an interface that is either a slice of
+// strings or a string and returns a deep copy of it as a slice of strings.
 func InterfaceToSliceOfStrings(v interface{}) []string {
 	if v == nil {
 		return nil
@@ -26,6 +26,8 @@ func InterfaceToSliceOfStrings(v interface{}) []string {
 		for i := 0; i < s.Len(); i++ {
 			sl[i] = s.Index(i).Interface().(string)
 		}
+	case reflect.String:
+		sl = append(sl, reflect.ValueOf(v).Interface().(string))
 	default:
 		return nil
 	}
@@ -47,6 +49,8 @@ func InterfaceToSliceOfInts(v interface{}) []int {
 		for i := 0; i < s.Len(); i++ {
 			sl[i] = s.Index(i).Interface().(int)
 		}
+	case reflect.Int:
+			sl = append(sl, reflect.ValueOf(v).Interface().(int))
 	default:
 		return nil
 	}
