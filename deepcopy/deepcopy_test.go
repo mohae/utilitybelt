@@ -121,7 +121,7 @@ type Testz struct {
 var testS = testStruct{
 	TestName: "testname",
 	Tests: []*Testz{
-		&Testz{
+		{
 			Expected: "expected1",
 			Unexpected: []string{
 				"oops1",
@@ -129,7 +129,7 @@ var testS = testStruct{
 			},
 			Done: true,
 		},
-		&Testz{
+		{
 			Expected: "expected2",
 			Unexpected: []string{
 				"oops2",
