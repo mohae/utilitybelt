@@ -1,5 +1,6 @@
 utilitybelt
 ===========
+[![Build Status](https://travis-ci.org/mohae/utilitybelt.png)](https://travis-ci.org/mohae/utilitybelt)
 
 Some functions in Go; though their functionality is questionable.
 
