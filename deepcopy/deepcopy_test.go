@@ -9,8 +9,8 @@ import (
 // This tests both []interface{} that contains strings and []string
 // along with an interface containing a single string
 func TestInterfaceToSliceOfStrings(t *testing.T) {
-	tests := []struct{
-		value []interface{}
+	tests := []struct {
+		value    []interface{}
 		expected []string
 	}{
 		{nil, []string{}},
@@ -27,8 +27,8 @@ func TestInterfaceToSliceOfStrings(t *testing.T) {
 			}
 		}
 	}
-	tests2 := []struct{
-		value []string
+	tests2 := []struct {
+		value    []string
 		expected []string
 	}{
 		{nil, []string{}},
@@ -58,8 +58,8 @@ func TestInterfaceToSliceOfStrings(t *testing.T) {
 // This tests both []interface{} that contains ints and []int
 // along with an interface containing a single int
 func TestInterfaceToSliceOfInt(t *testing.T) {
-	tests := []struct{
-		value []interface{}
+	tests := []struct {
+		value    []interface{}
 		expected []int
 	}{
 		{nil, []int{}},
@@ -76,8 +76,8 @@ func TestInterfaceToSliceOfInt(t *testing.T) {
 			}
 		}
 	}
-	tests2 := []struct{
-		value []int
+	tests2 := []struct {
+		value    []int
 		expected []int
 	}{
 		{nil, []int{}},
@@ -106,8 +106,8 @@ func TestInterfaceToSliceOfInt(t *testing.T) {
 
 // This tests both []interface{} and interface{}
 func TestIface(t *testing.T) {
-	tests := []struct{
-		value interface{}
+	tests := []struct {
+		value    interface{}
 		expected interface{}
 	}{
 		{nil, nil},
@@ -117,7 +117,7 @@ func TestIface(t *testing.T) {
 		{[]bool{true, true, false, true, false}, []bool{true, true, false, true, false}},
 		{[]interface{}{"A", "B", "C", 1, 2, 3}, []interface{}{"A", "B", "C", 1, 2, 3}},
 		{map[string]string{"A": "AA", "B": "BB", "C": "CC"}, map[string]string{"A": "AA", "B": "BB", "C": "CC"}},
-		{map[int]int{1:100, 2:200, 3:300}, map[int]int{1:100, 2:200, 3:300}},
+		{map[int]int{1: 100, 2: 200, 3: 300}, map[int]int{1: 100, 2: 200, 3: 300}},
 		{map[string]int{"A": 1, "B": 2, "C": 3, "D": 4}, map[string]int{"A": 1, "B": 2, "C": 3, "D": 4}},
 		{map[int]string{1: "A", 2: "B", 3: "C"}, map[int]string{1: "A", 2: "B", 3: "C"}},
 		{map[string]interface{}{"A": "a", "B": "b", "C": 100, "D": 4.4}, map[string]interface{}{"A": "a", "B": "b", "C": 100, "D": 4.4}},
