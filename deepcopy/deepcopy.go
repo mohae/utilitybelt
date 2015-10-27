@@ -69,7 +69,7 @@ func Iface(iface interface{}) interface{} {
 	// Recursively copy the original.
 	copyRecursive(original, cpy)
 	// Return theb copy as an interface.
-	return copy.Interface()
+	return cpy.Interface()
 }
 
 // copyRecursive does the actual copying of the interface. It currently has
