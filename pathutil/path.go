@@ -1,5 +1,5 @@
 // Contains path and directory related stuff.
-package goutils
+package pathutil
 
 import (
 	"errors"

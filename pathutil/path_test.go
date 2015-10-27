@@ -1,4 +1,4 @@
-package goutils
+package pathutil
 
 import (
 	"testing"
@@ -18,7 +18,7 @@ func TestDirDirWalk(t *testing.T) {
 			expectedErr: "invalid does not exist",
 		},
 		{
-			path: "test/pixies",
+			path: "../test_files/pixies",
 			expected: map[string]mt{
 				"I-cant-forget.txt":            {},
 				"Ive-been-waiting-for-you.txt": {},
@@ -34,7 +34,7 @@ func TestDirDirWalk(t *testing.T) {
 			expectedErr: "",
 		},
 		{
-			path: "test/pink-floyd",
+			path: "../test_files/pink-floyd",
 			expected: map[string]mt{
 				"echos.txt":                    {},
 				"one-of-these-days.txt":        {},
@@ -53,7 +53,7 @@ func TestDirDirWalk(t *testing.T) {
 			expectedErr: "",
 		},
 		{
-			path: "test",
+			path: "../test_files",
 			expected: map[string]mt{
 				"I-cant-forget.txt":                      {},
 				"Ive-been-waiting-for-you.txt":           {},
@@ -88,22 +88,22 @@ func TestDirDirWalk(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
+	for i, test := range tests {
 		d := &Dir{Files: []file{}}
 		err := d.Walk(test.path)
 		if err != nil {
 			if err.Error() != test.expectedErr {
-				t.Errorf("Expected %q got %q", test.expectedErr, err)
+				t.Errorf("%d: expected %q got %q", i, test.expectedErr, err)
 			}
-		} else {
-			if test.expectedErr != "" {
-				t.Errorf("Expected error %s", err)
-			} else {
-				for _, f := range d.Files {
-					if _, ok := test.expected[f.Info.Name()]; !ok {
-						t.Errorf("%s was indexed but not found in the expected filename list", f.Info.Name())
-					}
-				}
+			continue
+		}
+		if test.expectedErr != "" {
+			t.Errorf("%d: xpected error %s", i, err)
+			continue
+		}
+		for _, f := range d.Files {
+			if _, ok := test.expected[f.Info.Name()]; !ok {
+				t.Errorf("i: %s was indexed but not found in the expected filename list", i, f.Info.Name())
 			}
 		}
 	}
@@ -116,30 +116,26 @@ func TestPathExists(t *testing.T) {
 		errS     string
 	}{
 		{"", false, ""},
-		{"../test", true, ""},
-		{"../test/pixies/born-in-chicago.txt", true, ""},
+		{"../test_files", true, ""},
+		{"../test_files/pixies/born-in-chicago.txt", true, ""},
 		{"../tst", false, ""},
-		{"../test/pink-floyd/animals", false, ""},
+		{"../test_files/pink-floyd/animals", false, ""},
 	}
 
-	for _, test := range tests {
+	for i, test := range tests {
 		exists, err := PathExists(test.path)
 		if err != nil {
-			if test.errS == "" {
-				t.Errorf("An unexpected error was encountered while checking the existence of %s: %s", test.path, err.Error())
-			} else {
-				if err.Error() != test.errS {
-					t.Errorf("Expected %q, got %q", test.errS, err.Error())
-				}
+			if err.Error() != test.errS {
+				t.Errorf("%d: expected %q, got %q", i, test.errS, err.Error())
 			}
-		} else {
-			if test.errS != "" {
-				t.Errorf("%s was expected, but no error was encountered.", test.errS)
-			} else {
-				if exists != test.expected {
-					t.Errorf("Expected %v got %v for %s", test.expected, exists, test.path)
-				}
-			}
+			continue
+		}
+		if test.errS != "" {
+			t.Errorf("%d: %s was expected, but no error was encountered.", i, test.errS)
+			continue
+		}
+		if exists != test.expected {
+			t.Errorf("%d: expected %v got %v for %s", i, test.expected, exists, test.path)
 		}
 	}
 }
