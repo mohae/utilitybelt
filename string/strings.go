@@ -5,7 +5,6 @@ import (
 	"strings"
 )
 
-
 // SetPrefix checks the string to see if it already has the prefix. If it
 // doesn't have the prefix, the prefix is prefixed to the string.
 //
