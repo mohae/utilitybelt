@@ -65,16 +65,16 @@ func Iface(iface interface{}) interface{} {
 	// Make the interface a reflect.Value
 	original := reflect.ValueOf(iface)
 	// Make a copy of the same type as the original.
-	copy := reflect.New(original.Type()).Elem()
+	cpy := reflect.New(original.Type()).Elem()
 	// Recursively copy the original.
-	copyRecursive(original, copy)
+	copyRecursive(original, cpy)
 	// Return theb copy as an interface.
 	return copy.Interface()
 }
 
 // copyRecursive does the actual copying of the interface. It currently has
 // limited support for what it can handle. Add as needed.
-func copyRecursive(original, copy reflect.Value) {
+func copyRecursive(original, cpy reflect.Value) {
 	// handle according to original's Kind
 	switch original.Kind() {
 	case reflect.Ptr:
@@ -84,8 +84,8 @@ func copyRecursive(original, copy reflect.Value) {
 		if !originalValue.IsValid() {
 			return
 		}
-		copy.Set(reflect.New(originalValue.Type()))
-		copyRecursive(originalValue, copy.Elem())
+		cpy.Set(reflect.New(originalValue.Type()))
+		copyRecursive(originalValue, cpy.Elem())
 	case reflect.Interface:
 		// Get the value for the interface, not the pointer.
 		originalValue := original.Elem()
@@ -95,39 +95,39 @@ func copyRecursive(original, copy reflect.Value) {
 		// Get the value by calling Elem().
 		copyValue := reflect.New(originalValue.Type()).Elem()
 		copyRecursive(originalValue, copyValue)
-		copy.Set(copyValue)
+		cpy.Set(copyValue)
 	case reflect.Struct:
 		// Go through each field of the struct and copy it.
 		for i := 0; i < original.NumField(); i++ {
-			if copy.Field(i).CanSet() {
-				copyRecursive(original.Field(i), copy.Field(i))
+			if cpy.Field(i).CanSet() {
+				copyRecursive(original.Field(i), cpy.Field(i))
 			}
 		}
 	case reflect.Slice:
 		// Make a new slice and copy each element.
-		copy.Set(reflect.MakeSlice(original.Type(), original.Len(), original.Cap()))
+		cpy.Set(reflect.MakeSlice(original.Type(), original.Len(), original.Cap()))
 		for i := 0; i < original.Len(); i++ {
-			copyRecursive(original.Index(i), copy.Index(i))
+			copyRecursive(original.Index(i), cpy.Index(i))
 		}
 	case reflect.Map:
-		copy.Set(reflect.MakeMap(original.Type()))
+		cpy.Set(reflect.MakeMap(original.Type()))
 		for _, key := range original.MapKeys() {
 			originalValue := original.MapIndex(key)
 			copyValue := reflect.New(originalValue.Type()).Elem()
 			copyRecursive(originalValue, copyValue)
-			copy.SetMapIndex(key, copyValue)
+			cpy.SetMapIndex(key, copyValue)
 		}
 	// Set the actual values from here on.
 	case reflect.String:
-		copy.SetString(original.Interface().(string))
+		cpy.SetString(original.Interface().(string))
 	case reflect.Int:
-		copy.SetInt(int64(original.Interface().(int)))
+		cpy.SetInt(int64(original.Interface().(int)))
 	case reflect.Bool:
-		copy.SetBool(original.Interface().(bool))
+		cpy.SetBool(original.Interface().(bool))
 	case reflect.Float64:
-		copy.SetFloat(original.Interface().(float64))
+		cpy.SetFloat(original.Interface().(float64))
 
 	default:
-		copy.Set(original)
+		cpy.Set(original)
 	}
 }
