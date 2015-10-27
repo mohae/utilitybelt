@@ -1,4 +1,4 @@
-package maps
+package maputil
 
 // StringInterfaceToSlices takes a map[string]interface{} and returns slices of its keys and
 // values with their indexes matching
