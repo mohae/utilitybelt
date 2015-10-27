@@ -131,3 +131,43 @@ func TestIface(t *testing.T) {
 		}
 	}
 }
+
+// TestStruct has both exported and unexported fields for testing can set.
+type TestStruct struct {
+	Strings string
+	strings string
+	Ints    int
+	ints    int
+	SSlice  []string
+	sSlice  []string
+	ISlice  []int
+	iSlice  []int
+	SSMap   map[string]string
+	sSMap   map[string]string
+}
+
+func TestCanSet(t *testing.T) {
+	tst := TestStruct{
+		Strings: "an exported string",
+		strings: "an unexported string",
+		Ints:    42,
+		ints:    11,
+		SSlice:  []string{"hello", "world"},
+		sSlice:  []string{"don't", "panic"},
+		ISlice:  []int{1, 2, 3},
+		iSlice:  []int{42, 11},
+		SSMap:   map[string]string{"french": "bonjour", "spanish": "hola"},
+		sSMap:   map[string]string{"french": "au revoir", "spanish": "adios"},
+	}
+	expected := TestStruct{
+		Strings: "an exported string",
+		Ints:    42,
+		SSlice:  []string{"hello", "world"},
+		ISlice:  []int{1, 2, 3},
+		SSMap:   map[string]string{"french": "bonjour", "spanish": "hola"},
+	}
+	cpy := Iface(tst)
+	if json.MarshalToString(cpy) != json.MarshalToString(expected) {
+		t.Errorf("Expected copy to be %#v, got %#v\n", expected, cpy)
+	}
+}
