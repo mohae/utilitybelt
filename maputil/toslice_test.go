@@ -38,8 +38,8 @@ func TestStringInterfaceToSlices(t *testing.T) {
 				t.Errorf("%d: key %s, which was extracted from the passed map was not found in it.", i, key)
 				continue
 			}
-			if val != values[i] {
-				t.Errorf("%d: unexpected value extracted from map for %s: %s received,  %s expected", i, key, val, values[i])
+			if val != values[j] {
+				t.Errorf("%d: unexpected value extracted from map for %s: %s received,  %s expected", i, key, val, values[j])
 				continue
 			}
 			var found bool
@@ -101,8 +101,8 @@ func TestStringStringToSlices(t *testing.T) {
 				t.Errorf("%d: Key %s, which was extracted from the passed map was not found in it.", i, key)
 				continue
 			}
-			if val != values[i] {
-				t.Errorf("%d: nexpected value extracted from map for %s: %s received,  %s expected", i, key, val, values[i])
+			if val != values[j] {
+				t.Errorf("%d: nexpected value extracted from map for %s: %s received,  %s expected", i, key, val, values[j])
 				continue
 			}
 			var found bool
@@ -164,8 +164,8 @@ func TestStringIntToSlices(t *testing.T) {
 				t.Errorf("%d: key %s, which was extracted from the passed map was not found in it.", i, key)
 				continue
 			}
-			if val != values[i] {
-				t.Errorf("%d: unexpected value extracted from map for %s: %d received, %d expected", i, key, val, values[i])
+			if val != values[j] {
+				t.Errorf("%d: unexpected value extracted from map for %s: %d received, %d expected", i, key, val, values[j])
 				continue
 			}
 			var found bool
@@ -227,8 +227,8 @@ func TestStringBoolToSlices(t *testing.T) {
 				t.Errorf("%d: key %s, which was extracted from the passed map was not found in it.", i, key)
 				continue
 			}
-			if val != values[i] {
-				t.Errorf("%d: unexpected value extracted from map for %s: %t received, %t expected", i, key, val, values[i])
+			if val != values[j] {
+				t.Errorf("%d: unexpected value extracted from map for %s: %t received, %t expected", i, key, val, values[j])
 				continue
 			}
 			var found bool
