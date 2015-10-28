@@ -112,6 +112,11 @@ func TestIface(t *testing.T) {
 	}{
 		{nil, nil},
 		{[]int{1, 2, 2}, []int{1, 2, 2}},
+		{[]int8{1, 2, 2}, []int8{1, 2, 2}},
+		{[]int16{1, 2, 2}, []int16{1, 2, 2}},
+		{[]int32{1, 2, 2}, []int32{1, 2, 2}},
+		{[]int64{1, 2, 2}, []int64{1, 2, 2}},
+		{[]float32{1.1, 2.2, 3.154}, []float32{1.1, 2.2, 3.154}},
 		{[]float64{1.1, 2.2, 3.154}, []float64{1.1, 2.2, 3.154}},
 		{[]string{"A", "B", "C"}, []string{"A", "B", "C"}},
 		{[]bool{true, true, false, true, false}, []bool{true, true, false, true, false}},
