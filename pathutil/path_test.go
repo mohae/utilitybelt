@@ -103,7 +103,7 @@ func TestDirDirWalk(t *testing.T) {
 		}
 		for _, f := range d.Files {
 			if _, ok := test.expected[f.Info.Name()]; !ok {
-				t.Errorf("i: %s was indexed but not found in the expected filename list", i, f.Info.Name())
+				t.Errorf("%d: %s was indexed but not found in the expected filename list", i, f.Info.Name())
 			}
 		}
 	}

@@ -1,5 +1,5 @@
-// deepcopy deep copies maps, slices, etc. A standard copy will copy the
-// pointers: deep copy copies the values pointed to.
+// Package deepcopy deep copies maps, slices, structs, etc. A standard copy will copy
+// the pointers: deep copy copies the values pointed to.
 //
 // Only what is needed has been implemented. Could make more dynamic, at the
 // cost of reflection. Either adjust as needed or create a new function.

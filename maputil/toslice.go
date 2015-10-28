@@ -1,3 +1,9 @@
+// Package maputil provides some helper functions for working with maps.
+//
+// Currently it is limited to taking maps and returns them as slices of keys and
+// values with their indexes corresponding.  Currently only supports maps with strings
+// as keys and a limited amount of value types.  Support will be added for other map
+// types as needed.
 package maputil
 
 // StringInterfaceToSlices takes a map[string]interface{} and returns slices of its keys and

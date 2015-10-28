@@ -25,21 +25,22 @@ func TestStringInterfaceToSlices(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
+	for i, test := range tests {
 		keys, values := StringInterfaceToSlices(test.m)
 		if len(keys) != len(values) {
-			t.Errorf("Mismatched slices: key length was %s; values length was %s")
+			t.Errorf("%d: mismatched slices: key length was %d; values length was %d", i, len(keys), len(values))
 			continue
 		}
-		for i, key := range keys {
+		for j, key := range keys {
 			val, ok := test.m[key]
 			// first check to see if what we received is in original
 			if !ok {
-				t.Errorf("Key %s, which was extracted from the passed map was not found in it.", key)
+				t.Errorf("%d: key %s, which was extracted from the passed map was not found in it.", i, key)
 				continue
 			}
 			if val != values[i] {
-				t.Errorf("Unexpected value extracted from map for %s: %s received,  %s expected", key, val, values[i])
+				t.Errorf("%d: unexpected value extracted from map for %s: %s received,  %s expected", i, key, val, values[i])
+				continue
 			}
 			var found bool
 			// then check to see if it is in expected
@@ -50,7 +51,7 @@ func TestStringInterfaceToSlices(t *testing.T) {
 				}
 			}
 			if !found {
-				t.Errorf("%s not found in the expected keys", key)
+				t.Errorf("%d: %s not found in the expected keys", i, key)
 			}
 			found = false
 			for _, v := range test.expectedValues {
@@ -60,7 +61,7 @@ func TestStringInterfaceToSlices(t *testing.T) {
 				}
 			}
 			if !found {
-				t.Errorf("%s not found in the expected values", val)
+				t.Errorf("%d: %s not found in the expected values", i, val)
 			}
 		}
 	}
@@ -87,21 +88,22 @@ func TestStringStringToSlices(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
+	for i, test := range tests {
 		keys, values := StringStringToSlices(test.m)
 		if len(keys) != len(values) {
-			t.Errorf("Mismatched slices: key length was %s; values length was %s")
+			t.Errorf("%d: mismatched slices: key length was %d; values length was %d", i, len(keys), len(values))
 			continue
 		}
-		for i, key := range keys {
+		for j, key := range keys {
 			val, ok := test.m[key]
 			// first check to see if what we received is in original
 			if !ok {
-				t.Errorf("Key %s, which was extracted from the passed map was not found in it.", key)
+				t.Errorf("%d: Key %s, which was extracted from the passed map was not found in it.", i, key)
 				continue
 			}
 			if val != values[i] {
-				t.Errorf("Unexpected value extracted from map for %s: %s received,  %s expected", key, val, values[i])
+				t.Errorf("%d: nexpected value extracted from map for %s: %s received,  %s expected", i, key, val, values[i])
+				continue
 			}
 			var found bool
 			// then check to see if it is in expected
@@ -122,7 +124,7 @@ func TestStringStringToSlices(t *testing.T) {
 				}
 			}
 			if !found {
-				t.Errorf("%s not found in the expected values", val)
+				t.Errorf("%d: %s not found in the expected values", i, val)
 			}
 		}
 	}
@@ -149,21 +151,22 @@ func TestStringIntToSlices(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
+	for i, test := range tests {
 		keys, values := StringIntToSlices(test.m)
 		if len(keys) != len(values) {
-			t.Errorf("Mismatched slices: key length was %s; values length was %s")
+			t.Errorf("%d: mismatched slices: key length was %d; values length was %d", i, len(keys), len(values))
 			continue
 		}
-		for i, key := range keys {
+		for j, key := range keys {
 			val, ok := test.m[key]
 			// first check to see if what we received is in original
 			if !ok {
-				t.Errorf("Key %s, which was extracted from the passed map was not found in it.", key)
+				t.Errorf("%d: key %s, which was extracted from the passed map was not found in it.", i, key)
 				continue
 			}
 			if val != values[i] {
-				t.Errorf("Unexpected value extracted from map for %s: %s received,  %s expected", key, val, values[i])
+				t.Errorf("%d: unexpected value extracted from map for %s: %d received, %d expected", i, key, val, values[i])
+				continue
 			}
 			var found bool
 			// then check to see if it is in expected
@@ -174,7 +177,7 @@ func TestStringIntToSlices(t *testing.T) {
 				}
 			}
 			if !found {
-				t.Errorf("%s not found in the expected keys", key)
+				t.Errorf("%d: %s not found in the expected keys", i, key)
 			}
 			found = false
 			for _, v := range test.expectedValues {
@@ -184,7 +187,7 @@ func TestStringIntToSlices(t *testing.T) {
 				}
 			}
 			if !found {
-				t.Errorf("%s not found in the expected values", val)
+				t.Errorf("%d: %d not found in the expected values", i, val)
 			}
 		}
 	}
@@ -211,21 +214,22 @@ func TestStringBoolToSlices(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
+	for i, test := range tests {
 		keys, values := StringBoolToSlices(test.m)
 		if len(keys) != len(values) {
-			t.Errorf("Mismatched slices: key length was %s; values length was %s")
+			t.Errorf("%d: mismatched slices: key length was %d; values length was %d", i, len(keys), len(values))
 			continue
 		}
-		for i, key := range keys {
+		for j, key := range keys {
 			val, ok := test.m[key]
 			// first check to see if what we received is in original
 			if !ok {
-				t.Errorf("Key %s, which was extracted from the passed map was not found in it.", key)
+				t.Errorf("%d: key %s, which was extracted from the passed map was not found in it.", i, key)
 				continue
 			}
 			if val != values[i] {
-				t.Errorf("Unexpected value extracted from map for %s: %s received,  %s expected", key, val, values[i])
+				t.Errorf("%d: unexpected value extracted from map for %s: %t received, %t expected", i, key, val, values[i])
+				continue
 			}
 			var found bool
 			// then check to see if it is in expected
@@ -236,7 +240,7 @@ func TestStringBoolToSlices(t *testing.T) {
 				}
 			}
 			if !found {
-				t.Errorf("%s not found in the expected keys", key)
+				t.Errorf("%d: %s not found in the expected keys", i, key)
 			}
 			found = false
 			for _, v := range test.expectedValues {
@@ -246,7 +250,7 @@ func TestStringBoolToSlices(t *testing.T) {
 				}
 			}
 			if !found {
-				t.Errorf("%s not found in the expected values", val)
+				t.Errorf("%d: %t not found in the expected values", i, val)
 			}
 		}
 	}

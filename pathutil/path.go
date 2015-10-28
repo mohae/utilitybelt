@@ -1,15 +1,16 @@
-// Contains path and directory related stuff.
+// Package pathutil provides some simple path related functions.  Before using, please
+// check the standard library's path and path/filepath functions to see if there is
+// something more appropraite.
 package pathutil
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-// Dir, directory is a container for a list of filenames
+// Dir is a container for a list of filenames in a directory.
 type Dir struct {
 	Files []file
 }
@@ -20,7 +21,7 @@ type file struct {
 	Info os.FileInfo
 }
 
-// DirWalk walks the passed path, making a list of all the files that are
+// Walk walks the passed path, making a list of all the files that are
 // children of the path.
 func (d *Dir) Walk(path string) error {
 	// If the directory exists, create a list of its contents.
@@ -35,7 +36,7 @@ func (d *Dir) Walk(path string) error {
 	}
 
 	if !exists {
-		err = errors.New(fmt.Sprintf("%s does not exist", path))
+		err = fmt.Errorf("%s does not exist", path)
 		return err
 	}
 
@@ -53,7 +54,7 @@ func (d *Dir) Walk(path string) error {
 	return filepath.Walk(fullPath, callback)
 }
 
-// Dir.addFile adds the file to the Files slice
+// addFile adds the file to the Files slice
 func (d *Dir) addFile(root string, p string, fi os.FileInfo, err error) error {
 	// See if the path exists
 	var exists bool
@@ -63,7 +64,7 @@ func (d *Dir) addFile(root string, p string, fi os.FileInfo, err error) error {
 	}
 
 	if !exists {
-		err = errors.New(fmt.Sprintf("%s does not exist", p))
+		err = fmt.Errorf("%s does not exist", p)
 		return err
 	}
 
