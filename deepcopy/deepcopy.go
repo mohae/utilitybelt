@@ -119,13 +119,13 @@ func copyRecursive(original, cpy reflect.Value) {
 		}
 	// Set the actual values from here on.
 	case reflect.String:
-		cpy.SetString(original.Interface().(string))
+		cpy.SetString(original.String())
 	case reflect.Int:
-		cpy.SetInt(int64(original.Interface().(int)))
+		cpy.SetInt(original.Int())
 	case reflect.Bool:
-		cpy.SetBool(original.Interface().(bool))
+		cpy.SetBool(original.Bool())
 	case reflect.Float64:
-		cpy.SetFloat(original.Interface().(float64))
+		cpy.SetFloat(original.Float())
 
 	default:
 		cpy.Set(original)
