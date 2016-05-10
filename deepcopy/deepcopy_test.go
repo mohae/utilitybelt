@@ -3,7 +3,7 @@ package deepcopy
 import (
 	"testing"
 
-	json "github.com/mohae/customjson"
+	json "github.com/mohae/cjson"
 )
 
 // This tests both []interface{} that contains strings and []string
