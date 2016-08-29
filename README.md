@@ -1,16 +1,15 @@
 utilitybelt
 ===========
-[![Build Status](https://travis-ci.org/mohae/utilitybelt.png)](https://travis-ci.org/mohae/utilitybelt)
+[![GoDoc](https://godoc.org/github.com/mohae/utilitybelt?status.svg)](https://godoc.org/github.com/mohae/utilitybelt)[![Build Status](https://travis-ci.org/mohae/utilitybelt.png)](https://travis-ci.org/mohae/utilitybelt)
 
 Some functions in Go; though their functionality is questionable.
 
 ### Status
 * Limited functionality
 * Under development.
-* For toy use only, meant to try things.
 
 ## About
-Even though my utility belt isn't as cool as Batman's, its useful for doing a variety of simple things in Go. This is mainly a repository for commonly used code that I don't know whereelse to put it.
+Even though my utility belt isn't as cool as Batman's, its useful for doing a variety of simple things in Go. This is mainly a repository for commonly used code that I don't know where else to put it.
 
 The utility belt will become more useful or less.
 
