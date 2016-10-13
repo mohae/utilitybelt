@@ -9,6 +9,7 @@
 package deepcopy
 
 import (
+	"time"
 	"reflect"
 )
 
@@ -58,18 +59,22 @@ func InterfaceToSliceOfInts(v interface{}) []int {
 }
 
 // Iface recursively deep copies an interface{}
-func Iface(iface interface{}) interface{} {
+func IfacePtr(iface interface{}) interface{} {
 	if iface == nil {
 		return nil
 	}
 	// Make the interface a reflect.Value
 	original := reflect.ValueOf(iface)
 	// Make a copy of the same type as the original.
-	cpy := reflect.New(original.Type()).Elem()
+	cpy := reflect.New(original.Type())
 	// Recursively copy the original.
-	copyRecursive(original, cpy)
+	copyRecursive(original, cpy.Elem())
 	// Return theb copy as an interface.
 	return cpy.Interface()
+}
+
+func Iface(iface interface{}) interface{} {
+	return reflect.ValueOf(IfacePtr(iface)).Elem().Interface()
 }
 
 // copyRecursive does the actual copying of the interface. It currently has
@@ -97,10 +102,15 @@ func copyRecursive(original, cpy reflect.Value) {
 		copyRecursive(originalValue, copyValue)
 		cpy.Set(copyValue)
 	case reflect.Struct:
-		// Go through each field of the struct and copy it.
-		for i := 0; i < original.NumField(); i++ {
-			if cpy.Field(i).CanSet() {
-				copyRecursive(original.Field(i), cpy.Field(i))
+		switch v := original.Interface().(type) {
+		case time.Time:
+			cpy.Set(reflect.ValueOf(v))
+		default:
+			// Go through each field of the struct and copy it.
+			for i := 0; i < original.NumField(); i++ {
+				if cpy.Field(i).CanSet() {
+					copyRecursive(original.Field(i), cpy.Field(i))
+				}
 			}
 		}
 	case reflect.Slice:
