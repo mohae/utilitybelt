@@ -9,6 +9,7 @@
 package deepcopy
 
 import (
+	"fmt"
 	"time"
 	"reflect"
 )
@@ -87,7 +88,7 @@ func copyRecursive(original, cpy reflect.Value, stackLength int) {
 	stackLength += 1
 
 	if stackLength > STACK_LENGTH_LIMIT {
-		panic("Stack overflow")
+		panic(fmt.Sprintf("Stack overflow; reflect.Indirect(x).Type().Name(): %v; x.Interface(): %v", reflect.Indirect(original).Type().Name(), original.Interface()))
 	}
 	// handle according to original's Kind
 	switch original.Kind() {
